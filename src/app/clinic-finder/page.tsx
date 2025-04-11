@@ -13,39 +13,40 @@ interface Clinic {
     lat: number;
     lng: number;
   };
+  keywords: string[];
 }
 
 const allClinics: Clinic[] = [
-  { name: "Apollo Hospitals", address: "Various locations", location: { lat: 20.5937, lng: 78.9629 } },
-  { name: "Fortis Healthcare", address: "Various locations", location: { lat: 20.5937, lng: 78.9629 } },
-  { name: "Max Healthcare", address: "Various locations", location: { lat: 20.5937, lng: 78.9629 } },
-  { name: "Manipal Hospitals", address: "Various locations", location: { lat: 20.5937, lng: 78.9629 } },
-  { name: "Narayana Health", address: "Various locations", location: { lat: 20.5937, lng: 78.9629 } },
-  { name: "Medanta – The Medicity", address: "Gurgaon", location: { lat: 28.4595, lng: 77.0266 } },
-  { name: "BLK Super Speciality Hospital", address: "New Delhi", location: { lat: 28.6139, lng: 77.2090 } },
-  { name: "Kokilaben Dhirubhai Ambani Hospital", address: "Mumbai", location: { lat: 19.0760, lng: 72.8777 } },
-  { name: "Columbia Asia Hospitals", address: "Various locations", location: { lat: 20.5937, lng: 78.9629 } },
-  { name: "Artemis Hospital", address: "Gurgaon", location: { lat: 28.4595, lng: 77.0266 } },
-  { name: "Dr. Mohan’s Diabetes Specialities Centre", address: "Chennai", location: { lat: 13.0827, lng: 80.2707 } },
-  { name: "Cloudnine Hospitals (Maternity & Child)", address: "Various locations", location: { lat: 20.5937, lng: 78.9629 } },
-  { name: "Rainbow Children’s Hospital", address: "Various locations", location: { lat: 20.5937, lng: 78.9629 } },
-  { name: "Kaya Skin Clinic", address: "Various locations", location: { lat: 20.5937, lng: 78.9629 } },
-  { name: "Vasan Eye Care", address: "Various locations", location: { lat: 20.5937, lng: 78.9629 } },
-  { name: "Sankara Nethralaya", address: "Chennai", location: { lat: 13.0827, lng: 80.2707 } },
-  { name: "Dr. Batra’s Homeopathy Clinics", address: "Various locations", location: { lat: 20.5937, lng: 78.9629 } },
-  { name: "Practo Care Clinics", address: "Various locations", location: { lat: 20.5937, lng: 78.9629 } },
-  { name: "SRL Diagnostics Clinics", address: "Various locations", location: { lat: 20.5937, lng: 78.9629 } },
-  { name: "Thyrocare Wellness Centres", address: "Various locations", location: { lat: 20.5937, lng: 78.9629 } },
-  { name: "Lifeline Multi-Speciality Clinic", address: "Generic location", location: { lat: 20.5937, lng: 78.9629 } },
-  { name: "HealthPlus Diagnostics", address: "Generic location", location: { lat: 20.5937, lng: 78.9629 } },
-  { name: "WellCare Hospital", address: "Generic location", location: { lat: 20.5937, lng: 78.9629 } },
-  { name: "Nova Medicare", address: "Generic location", location: { lat: 20.5937, lng: 78.9629 } },
-  { name: "CareFirst Medical Center", address: "Generic location", location: { lat: 20.5937, lng: 78.9629 } },
-  { name: "Greenleaf Wellness Hospital", address: "Generic location", location: { lat: 20.5937, lng: 78.9629 } },
-  { name: "CityHealth Medical Institute", address: "Generic location", location: { lat: 20.5937, lng: 78.9629 } },
-  { name: "Pulse24 Emergency Clinic", address: "Generic location", location: { lat: 20.5937, lng: 78.9629 } },
-  { name: "UrbanMed Healthcare", address: "Generic location", location: { lat: 20.5937, lng: 78.9629 } },
-  { name: "VitaNova Clinic", address: "Generic location", location: { lat: 20.5937, lng: 78.9629 } }
+  { name: "Apollo Hospitals", address: "Various locations", location: { lat: 20.5937, lng: 78.9629 }, keywords: ["cardiology", "diabetes", "orthopedic", "cancer", "maternity"] },
+  { name: "Fortis Healthcare", address: "Various locations", location: { lat: 20.5937, lng: 78.9629 }, keywords: ["cardiology", "diabetes", "orthopedic", "cancer", "maternity"] },
+  { name: "Max Healthcare", address: "Various locations", location: { lat: 20.5937, lng: 78.9629 }, keywords: ["cardiology", "diabetes", "orthopedic", "cancer", "maternity"] },
+  { name: "Manipal Hospitals", address: "Various locations", location: { lat: 20.5937, lng: 78.9629 }, keywords: ["cardiology", "diabetes", "orthopedic", "cancer", "maternity"] },
+  { name: "Narayana Health", address: "Various locations", location: { lat: 20.5937, lng: 78.9629 }, keywords: ["cardiology", "diabetes", "orthopedic", "cancer", "maternity"] },
+  { name: "Medanta – The Medicity", address: "Gurgaon", location: { lat: 28.4595, lng: 77.0266 }, keywords: ["multispeciality", "internal medicine", "surgery"] },
+  { name: "BLK Super Speciality Hospital", address: "New Delhi", location: { lat: 28.6139, lng: 77.2090 }, keywords: ["multispeciality", "cardiology", "neurology"] },
+  { name: "Kokilaben Dhirubhai Ambani Hospital", address: "Mumbai", location: { lat: 19.0760, lng: 72.8777 }, keywords: ["multispeciality", "oncology", "cardiac care"] },
+  { name: "Columbia Asia Hospitals", address: "Various locations", location: { lat: 20.5937, lng: 78.9629 }, keywords: ["general", "family medicine", "pediatrics"] },
+  { name: "Artemis Hospital", address: "Gurgaon", location: { lat: 28.4595, lng: 77.0266 }, keywords: ["oncology", "neuroscience", "cardiology"] },
+  { name: "Dr. Mohan’s Diabetes Specialities Centre", address: "Chennai", location: { lat: 13.0827, lng: 80.2707 }, keywords: ["diabetes", "endocrinology"] },
+  { name: "Cloudnine Hospitals (Maternity & Child)", address: "Various locations", location: { lat: 20.5937, lng: 78.9629 }, keywords: ["maternity", "childcare", "gynecology"] },
+  { name: "Rainbow Children’s Hospital", address: "Various locations", location: { lat: 20.5937, lng: 78.9629 }, keywords: ["pediatric", "children", "kids", "fever"] },
+  { name: "Kaya Skin Clinic", address: "Various locations", location: { lat: 20.5937, lng: 78.9629 }, keywords: ["skin", "dermatology", "cosmetics"] },
+  { name: "Vasan Eye Care", address: "Various locations", location: { lat: 20.5937, lng: 78.9629 }, keywords: ["eye", "ophthalmology", "vision"] },
+  { name: "Sankara Nethralaya", address: "Chennai", location: { lat: 13.0827, lng: 80.2707 }, keywords: ["eye", "ophthalmology", "vision"] },
+  { name: "Dr. Batra’s Homeopathy Clinics", address: "Various locations", location: { lat: 20.5937, lng: 78.9629 }, keywords: ["homeopathy", "alternative medicine"] },
+  { name: "Practo Care Clinics", address: "Various locations", location: { lat: 20.5937, lng: 78.9629 }, keywords: ["general", "primary care"] },
+  { name: "SRL Diagnostics Clinics", address: "Various locations", location: { lat: 20.5937, lng: 78.9629 }, keywords: ["diagnostics", "testing", "pathology"] },
+  { name: "Thyrocare Wellness Centres", address: "Various locations", location: { lat: 20.5937, lng: 78.9629 }, keywords: ["wellness", "preventative care"] },
+  { name: "Lifeline Multi-Speciality Clinic", address: "Generic location", location: { lat: 20.5937, lng: 78.9629 }, keywords: ["general", "checkup"] },
+  { name: "HealthPlus Diagnostics", address: "Generic location", location: { lat: 20.5937, lng: 78.9629 }, keywords: ["diagnostics", "checkup"] },
+  { name: "WellCare Hospital", address: "Generic location", location: { lat: 20.5937, lng: 78.9629 }, keywords: ["general", "emergency"] },
+  { name: "Nova Medicare", address: "Generic location", location: { lat: 20.5937, lng: 78.9629 }, keywords: ["medicare", "insurance"] },
+  { name: "CareFirst Medical Center", address: "Generic location", location: { lat: 20.5937, lng: 78.9629 }, keywords: ["general", "first aid"] },
+  { name: "Greenleaf Wellness Hospital", address: "Generic location", location: { lat: 20.5937, lng: 78.9629 }, keywords: ["wellness", "therapy"] },
+  { name: "CityHealth Medical Institute", address: "Generic location", location: { lat: 20.5937, lng: 78.9629 }, keywords: ["research", "institute"] },
+  { name: "Pulse24 Emergency Clinic", address: "Generic location", location: { lat: 20.5937, lng: 78.9629 }, keywords: ["emergency", "urgent care"] },
+  { name: "UrbanMed Healthcare", address: "Generic location", location: { lat: 20.5937, lng: 78.9629 }, keywords: ["urban", "healthcare"] },
+  { name: "VitaNova Clinic", address: "Generic location", location: { lat: 20.5937, lng: 78.9629 }, keywords: ["therapy", "rehabilitation"] }
 ];
 
 export default function ClinicFinderPage() {
@@ -60,7 +61,8 @@ export default function ClinicFinderPage() {
       const searchTerm = healthIssue.toLowerCase();
       const foundClinics = allClinics.filter(clinic =>
         clinic.name.toLowerCase().includes(searchTerm) ||
-        clinic.address.toLowerCase().includes(searchTerm)
+        clinic.address.toLowerCase().includes(searchTerm) ||
+        clinic.keywords.some(keyword => searchTerm.includes(keyword))
       );
 
       if (foundClinics.length > 0) {
