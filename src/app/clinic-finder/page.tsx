@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import { useToast } from "@/hooks/use-toast"
 
 interface Clinic {
   name: string;
@@ -36,6 +37,7 @@ export default function ClinicFinderPage() {
   const [healthIssue, setHealthIssue] = useState('');
   const [clinics, setClinics] = useState<Clinic[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+    const { toast } = useToast()
 
   const handleFindClinics = async () => {
     setIsLoading(true);
@@ -55,11 +57,21 @@ export default function ClinicFinderPage() {
 
       } else {
         console.error("Could not find coordinates for the given health issue.");
+          toast({
+            title: "Error",
+            description: "Could not find coordinates for the given health issue. Please try a different search.",
+            variant: "destructive",
+          })
         setClinics([]);
       }
 
     } catch (error) {
       console.error("Error finding clinics:", error);
+        toast({
+            title: "Error",
+            description: "Failed to find clinics. Please try again.",
+            variant: "destructive",
+        })
       setClinics([]);
     } finally {
       setIsLoading(false);
