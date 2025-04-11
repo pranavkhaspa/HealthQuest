@@ -1,8 +1,6 @@
-
 'use client';
 
 import { useState } from 'react';
-import { aiSymptomChecker } from '@/ai/flows/ai-symptom-checker';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -19,6 +17,24 @@ const symptomsList = [
   "Shortness of Breath"
 ];
 
+const symptomResults = {
+  "Fatigue": ["Possible overexertion or lack of sleep", "Consider resting and managing stress."],
+  "Headache": ["Possible tension headache or migraine", "Stay hydrated and consider pain relief."],
+  "Fever": ["Possible infection or virus", "Monitor temperature and consult a doctor if high."],
+  "Cough": ["Possible cold or respiratory infection", "Use cough drops and stay hydrated."],
+  "Sore Throat": ["Possible throat infection or strep throat", "Gargle with salt water and see a doctor if severe."],
+  "Muscle Aches": ["Possible overexertion or flu", "Rest and consider pain relief."],
+  "Nausea": ["Possible indigestion or food poisoning", "Stay hydrated and avoid heavy foods."],
+  "Dizziness": ["Possible dehydration or low blood pressure", "Sit down and drink water."],
+  "Runny Nose": ["Possible cold or allergies", "Use decongestants and stay hydrated."],
+  "Shortness of Breath": ["Possible asthma or respiratory issue", "Consult a doctor immediately."],
+  "Fatigue,Headache": ["Possible stress or dehydration", "Rest and hydrate."],
+  "Fever,Cough": ["Likely a cold or flu", "Rest, hydrate, and consider over-the-counter remedies."],
+  "Nausea,Dizziness": ["Possible inner ear infection or motion sickness", "Rest and take anti-nausea medication if needed."],
+  "Shortness of Breath,Cough": ["Possible bronchitis or pneumonia", "Consult a doctor immediately."],
+  "Fatigue,Muscle Aches,Fever": ["Likely the flu", "Rest and hydrate."],
+};
+
 export default function SymptomCheckerPage() {
   const [selectedSymptoms, setSelectedSymptoms] = useState<string[]>([]);
   const [possibleIssues, setPossibleIssues] = useState<string[]>([]);
@@ -30,17 +46,12 @@ export default function SymptomCheckerPage() {
     );
   };
 
-  const handleCheckSymptoms = async () => {
+  const handleCheckSymptoms = () => {
     setIsLoading(true);
-    try {
-      const result = await aiSymptomChecker({ symptoms: selectedSymptoms });
-      setPossibleIssues(result.possibleIssues);
-    } catch (error) {
-      console.error("Failed to check symptoms:", error);
-      setPossibleIssues(["Failed to get health issues. Please try again."]);
-    } finally {
-      setIsLoading(false);
-    }
+    const symptomsKey = selectedSymptoms.sort().join(',');
+    const results = symptomResults[symptomsKey] || ["No specific issues found for this combination."];
+    setPossibleIssues(results);
+    setIsLoading(false);
   };
 
   return (
