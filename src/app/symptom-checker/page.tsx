@@ -64,7 +64,8 @@ export default function SymptomCheckerPage() {
 
   const handleCheckSymptoms = () => {
     setIsLoading(true);
-    try {
+
+    setTimeout(() => {
       const causes: { cause: string; advice: string }[] = [];
       selectedSymptoms.forEach(symptom => {
         const symptomCauses = symptomToCauses[symptom];
@@ -88,9 +89,10 @@ export default function SymptomCheckerPage() {
       } else {
         setPossibleIssues(["No specific issues found for these symptoms. Please consult a doctor for further evaluation."]);
       }
-    } finally {
+
+      setSelectedSymptoms([]); // ✅ Clear selections after check
       setIsLoading(false);
-    }
+    }, 500); // Just to simulate a short delay
   };
 
   return (
@@ -137,4 +139,3 @@ export default function SymptomCheckerPage() {
     </div>
   );
 }
-
