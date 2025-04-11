@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
+import confetti from 'canvas-confetti'; // <-- Import confetti
 
 const healthChallenges = [
   {
@@ -213,29 +214,40 @@ export default function GamifiedScenariosPage() {
   const [score, setScore] = useState(0);
   const [feedback, setFeedback] = useState('');
   const [challengeCompleted, setChallengeCompleted] = useState(false);
+  const [celebrated, setCelebrated] = useState(false); // <- Add this state to ensure confetti runs once
 
   const currentChallenge = healthChallenges[currentChallengeIndex];
   const isLastChallenge = currentChallengeIndex === healthChallenges.length - 1;
   const allChallengesCompleted = currentChallengeIndex >= healthChallenges.length;
 
+  useEffect(() => {
+    if (allChallengesCompleted && !celebrated) {
+      confetti({
+        particleCount: 150,
+        spread: 70,
+        origin: { y: 0.6 },
+      });
+      setCelebrated(true);
+    }
+  }, [allChallengesCompleted, celebrated]);
+
   const handleAnswer = (isHealthy: boolean) => {
     if (isHealthy) {
       setScore(score + 1);
-      setFeedback('Great job! That was a healthy choice.');
+      setFeedback('✅ Great job! That was a healthy choice.');
     } else {
       setScore(Math.max(0, score - 1));
-      setFeedback('Oops! That might not have been the healthiest option.');
+      setFeedback('❌ Oops! That might not have been the healthiest option.');
     }
     setChallengeCompleted(true);
 
-    // Optionally, move to the next challenge after a delay
     setTimeout(() => {
       if (!isLastChallenge) {
         setCurrentChallengeIndex(currentChallengeIndex + 1);
         setFeedback('');
         setChallengeCompleted(false);
       } else {
-        setChallengeCompleted(false);
+        setCurrentChallengeIndex(currentChallengeIndex + 1); // advance past last
       }
     }, 2000);
   };
@@ -245,6 +257,7 @@ export default function GamifiedScenariosPage() {
     setScore(0);
     setFeedback('');
     setChallengeCompleted(false);
+    setCelebrated(false); // Reset celebration
   };
 
   return (
@@ -273,23 +286,18 @@ export default function GamifiedScenariosPage() {
               </Button>
             ))}
           </div>
+          {feedback && <p className="mt-4 font-medium">{feedback}</p>}
         </div>
       ) : (
-        <div className="bg-secondary/50 rounded-lg p-4 mb-4 max-w-md w-full">
-          <h2 className="text-2xl font-semibold mb-4">
-            🎉 Congratulations! You've completed all the challenges! 🎉
-          </h2>
-          <p className="text-xl mt-4">
-            Your Final Score: {score} / {healthChallenges.length}
-          </p>
-          <Button onClick={resetGame} className="mt-4 bg-accent text-accent-foreground">
+        <div className="bg-green-100 border border-green-300 text-green-900 p-6 rounded-lg shadow-md max-w-md text-center">
+          <h2 className="text-2xl font-bold mb-4">🎉 Congratulations!</h2>
+          <p className="text-lg mb-2">You completed all the health scenarios.</p>
+          <p className="text-xl font-semibold mb-4">Your Score: {score} / {healthChallenges.length}</p>
+          <Button onClick={resetGame} className="bg-blue-600 hover:bg-blue-700 text-white">
             Play Again
           </Button>
         </div>
       )}
-
-      {feedback && <p className="text-xl mt-4">{feedback}</p>}
-      {!allChallengesCompleted && <p className="text-xl mt-4">Your Score: {score}</p>}
     </div>
   );
 }
