@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState } from 'react';
@@ -55,7 +54,16 @@ export default function ClinicFinderPage() {
             <ul>
               {clinics.map((clinic, index) => (
                 <li key={index} className="mb-2">
-                  {clinic.name} - Lat: {clinic.location.lat}, Lng: {clinic.location.lng}
+                  {clinic.name}
+                  <br />
+                  {clinic.address}
+                  <br />
+                  {clinic.rating && (
+                    <span>
+                      Rating: {clinic.rating} ({clinic.user_ratings_total} ratings)
+                    </span>
+                  )}
+                  Lat: {clinic.location.lat}, Lng: {clinic.location.lng}
                 </li>
               ))}
             </ul>
