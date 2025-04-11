@@ -56,7 +56,12 @@ const basicHealthAdviceFlow = ai.defineFlow<
     outputSchema: BasicHealthAdviceOutputSchema,
   },
   async input => {
-    const {output} = await prompt(input);
-    return output!;
+    try{
+      const {output} = await prompt(input);
+      return output!;
+    } catch (error: any) {
+      console.error("[GoogleGenerativeAI Error]:", error);
+      throw new Error(`[GoogleGenerativeAI Error]: ${error.message}. Error source: src/ai/flows/basic-health-advice.ts (59:22)`);
+    }
   }
 );
