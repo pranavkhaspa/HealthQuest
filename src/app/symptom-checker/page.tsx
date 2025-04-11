@@ -9,31 +9,45 @@ const symptomsList = [
   "Muscle Aches", "Nausea", "Dizziness", "Runny Nose", "Shortness of Breath"
 ];
 
-// Normalize symptom keys: sort them for consistent matching
-const rawSymptomResults = {
-  ["Fatigue"]: ["Possible overexertion or lack of sleep", "Consider resting and managing stress."],
-  ["Headache"]: ["Possible tension headache or migraine", "Stay hydrated and consider pain relief."],
-  ["Fever"]: ["Possible infection or virus", "Monitor temperature and consult a doctor if high."],
-  ["Cough"]: ["Possible cold or respiratory infection", "Use cough drops and stay hydrated."],
-  ["Sore Throat"]: ["Possible throat infection or strep throat", "Gargle with salt water and see a doctor if severe."],
-  ["Muscle Aches"]: ["Possible overexertion or flu", "Rest and consider pain relief."],
-  ["Nausea"]: ["Possible indigestion or food poisoning", "Stay hydrated and avoid heavy foods."],
-  ["Dizziness"]: ["Possible dehydration or low blood pressure", "Sit down and drink water."],
-  ["Runny Nose"]: ["Possible cold or allergies", "Use decongestants and stay hydrated."],
-  ["Shortness of Breath"]: ["Possible asthma or respiratory issue", "Consult a doctor immediately."],
-  ["Fatigue,Headache"]: ["Possible stress or dehydration", "Rest and hydrate."],
-  ["Fever,Cough"]: ["Likely a cold or flu", "Rest, hydrate, and consider over-the-counter remedies."],
-  ["Nausea,Dizziness"]: ["Possible inner ear infection or motion sickness", "Rest and take anti-nausea medication if needed."],
-  ["Shortness of Breath,Cough"]: ["Possible bronchitis or pneumonia", "Consult a doctor immediately."],
-  ["Fatigue,Muscle Aches,Fever"]: ["Likely the flu", "Rest and hydrate."]
+const symptomToCauses: Record<string, { cause: string; advice: string }[]> = {
+  "Fatigue": [
+    { cause: "Lack of sleep or stress", advice: "Ensure adequate rest and manage stress levels." },
+    { cause: "Anemia or thyroid issues", advice: "Consider seeing a doctor for blood tests." },
+  ],
+  "Headache": [
+    { cause: "Tension headache", advice: "Stay hydrated, take breaks from screens." },
+    { cause: "Migraine", advice: "Avoid triggers, use pain relief if needed." },
+  ],
+  "Fever": [
+    { cause: "Viral or bacterial infection", advice: "Monitor temperature, consult a doctor if >102°F." },
+    { cause: "Flu or COVID", advice: "Rest, hydrate, isolate if needed." },
+  ],
+  "Cough": [
+    { cause: "Common cold", advice: "Use cough syrup, rest, and hydrate." },
+    { cause: "Bronchitis or pneumonia", advice: "Seek medical help if persistent." },
+  ],
+  "Sore Throat": [
+    { cause: "Strep throat or viral infection", advice: "Gargle warm salt water, consult doctor if severe." },
+  ],
+  "Muscle Aches": [
+    { cause: "Flu or overexertion", advice: "Rest and use pain relievers." },
+  ],
+  "Nausea": [
+    { cause: "Food poisoning or indigestion", advice: "Avoid solid food, sip water." },
+    { cause: "Stomach flu", advice: "Rest, hydrate, and monitor symptoms." },
+  ],
+  "Dizziness": [
+    { cause: "Dehydration or low blood pressure", advice: "Sit down, drink fluids." },
+    { cause: "Inner ear issues", advice: "See a doctor if recurrent." },
+  ],
+  "Runny Nose": [
+    { cause: "Cold or allergies", advice: "Use antihistamines or decongestants." },
+  ],
+  "Shortness of Breath": [
+    { cause: "Asthma or COVID", advice: "Seek immediate medical attention." },
+    { cause: "Pneumonia or heart issue", advice: "Go to the ER if severe." },
+  ],
 };
-
-// Sort keys so "Headache,Fatigue" and "Fatigue,Headache" are treated the same
-const symptomResults: Record<string, string[]> = {};
-Object.entries(rawSymptomResults).forEach(([key, value]) => {
-  const sortedKey = key.split(',').sort().join(',');
-  symptomResults[sortedKey] = value;
-});
 
 export default function SymptomCheckerPage() {
   const [selectedSymptoms, setSelectedSymptoms] = useState<string[]>([]);
@@ -50,16 +64,33 @@ export default function SymptomCheckerPage() {
 
   const handleCheckSymptoms = () => {
     setIsLoading(true);
-    const symptomsKey = selectedSymptoms.slice().sort().join(',');
-    const results = symptomResults[symptomsKey];
+    try {
+      const causes: { cause: string; advice: string }[] = [];
+      selectedSymptoms.forEach(symptom => {
+        const symptomCauses = symptomToCauses[symptom];
+        if (symptomCauses) {
+          causes.push(...symptomCauses);
+        }
+      });
 
-    if (results) {
-      setPossibleIssues(results);
-    } else {
-      setPossibleIssues(["No match found. Try selecting fewer or different symptoms."]);
+      const causeCounts: Record<string, { count: number; advice: string }> = {};
+      causes.forEach(item => {
+        causeCounts[item.cause] = causeCounts[item.cause] || { count: 0, advice: item.advice };
+        causeCounts[item.cause].count++;
+      });
+
+      const sortedCauses = Object.entries(causeCounts)
+        .sort(([, a], [, b]) => b.count - a.count)
+        .map(([cause, { advice }]) => ({ cause, advice }));
+
+      if (sortedCauses.length > 0) {
+        setPossibleIssues(sortedCauses.slice(0, 2).map(item => `${item.cause}. Advice: ${item.advice}`));
+      } else {
+        setPossibleIssues(["No specific issues found for these symptoms. Please consult a doctor for further evaluation."]);
+      }
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
 
   return (
@@ -106,3 +137,4 @@ export default function SymptomCheckerPage() {
     </div>
   );
 }
+
