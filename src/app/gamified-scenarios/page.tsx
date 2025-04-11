@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import confetti from 'canvas-confetti'; // <-- Import confetti
+// import confetti from 'canvas-confetti'; // <-- Import confetti
 
 const healthChallenges = [
   {
@@ -222,11 +222,11 @@ export default function GamifiedScenariosPage() {
 
   useEffect(() => {
     if (allChallengesCompleted && !celebrated) {
-      confetti({
-        particleCount: 150,
-        spread: 70,
-        origin: { y: 0.6 },
-      });
+      // confetti({
+      //   particleCount: 150,
+      //   spread: 70,
+      //   origin: { y: 0.6 },
+      // });
       setCelebrated(true);
     }
   }, [allChallengesCompleted, celebrated]);
