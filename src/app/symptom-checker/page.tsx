@@ -5,35 +5,35 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 const symptomsList = [
-  "Fatigue",
-  "Headache",
-  "Fever",
-  "Cough",
-  "Sore Throat",
-  "Muscle Aches",
-  "Nausea",
-  "Dizziness",
-  "Runny Nose",
-  "Shortness of Breath"
+  "Fatigue", "Headache", "Fever", "Cough", "Sore Throat",
+  "Muscle Aches", "Nausea", "Dizziness", "Runny Nose", "Shortness of Breath"
 ];
 
-const symptomResults = {
-  "Fatigue": ["Possible overexertion or lack of sleep", "Consider resting and managing stress."],
-  "Headache": ["Possible tension headache or migraine", "Stay hydrated and consider pain relief."],
-  "Fever": ["Possible infection or virus", "Monitor temperature and consult a doctor if high."],
-  "Cough": ["Possible cold or respiratory infection", "Use cough drops and stay hydrated."],
-  "Sore Throat": ["Possible throat infection or strep throat", "Gargle with salt water and see a doctor if severe."],
-  "Muscle Aches": ["Possible overexertion or flu", "Rest and consider pain relief."],
-  "Nausea": ["Possible indigestion or food poisoning", "Stay hydrated and avoid heavy foods."],
-  "Dizziness": ["Possible dehydration or low blood pressure", "Sit down and drink water."],
-  "Runny Nose": ["Possible cold or allergies", "Use decongestants and stay hydrated."],
-  "Shortness of Breath": ["Possible asthma or respiratory issue", "Consult a doctor immediately."],
-  "Fatigue,Headache": ["Possible stress or dehydration", "Rest and hydrate."],
-  "Fever,Cough": ["Likely a cold or flu", "Rest, hydrate, and consider over-the-counter remedies."],
-  "Nausea,Dizziness": ["Possible inner ear infection or motion sickness", "Rest and take anti-nausea medication if needed."],
-  "Shortness of Breath,Cough": ["Possible bronchitis or pneumonia", "Consult a doctor immediately."],
-  "Fatigue,Muscle Aches,Fever": ["Likely the flu", "Rest and hydrate."],
+// Normalize symptom keys: sort them for consistent matching
+const rawSymptomResults = {
+  ["Fatigue"]: ["Possible overexertion or lack of sleep", "Consider resting and managing stress."],
+  ["Headache"]: ["Possible tension headache or migraine", "Stay hydrated and consider pain relief."],
+  ["Fever"]: ["Possible infection or virus", "Monitor temperature and consult a doctor if high."],
+  ["Cough"]: ["Possible cold or respiratory infection", "Use cough drops and stay hydrated."],
+  ["Sore Throat"]: ["Possible throat infection or strep throat", "Gargle with salt water and see a doctor if severe."],
+  ["Muscle Aches"]: ["Possible overexertion or flu", "Rest and consider pain relief."],
+  ["Nausea"]: ["Possible indigestion or food poisoning", "Stay hydrated and avoid heavy foods."],
+  ["Dizziness"]: ["Possible dehydration or low blood pressure", "Sit down and drink water."],
+  ["Runny Nose"]: ["Possible cold or allergies", "Use decongestants and stay hydrated."],
+  ["Shortness of Breath"]: ["Possible asthma or respiratory issue", "Consult a doctor immediately."],
+  ["Fatigue,Headache"]: ["Possible stress or dehydration", "Rest and hydrate."],
+  ["Fever,Cough"]: ["Likely a cold or flu", "Rest, hydrate, and consider over-the-counter remedies."],
+  ["Nausea,Dizziness"]: ["Possible inner ear infection or motion sickness", "Rest and take anti-nausea medication if needed."],
+  ["Shortness of Breath,Cough"]: ["Possible bronchitis or pneumonia", "Consult a doctor immediately."],
+  ["Fatigue,Muscle Aches,Fever"]: ["Likely the flu", "Rest and hydrate."]
 };
+
+// Sort keys so "Headache,Fatigue" and "Fatigue,Headache" are treated the same
+const symptomResults: Record<string, string[]> = {};
+Object.entries(rawSymptomResults).forEach(([key, value]) => {
+  const sortedKey = key.split(',').sort().join(',');
+  symptomResults[sortedKey] = value;
+});
 
 export default function SymptomCheckerPage() {
   const [selectedSymptoms, setSelectedSymptoms] = useState<string[]>([]);
@@ -42,15 +42,23 @@ export default function SymptomCheckerPage() {
 
   const toggleSymptom = (symptom: string) => {
     setSelectedSymptoms(prev =>
-      prev.includes(symptom) ? prev.filter(s => s !== symptom) : [...prev, symptom]
+      prev.includes(symptom)
+        ? prev.filter(s => s !== symptom)
+        : [...prev, symptom]
     );
   };
 
   const handleCheckSymptoms = () => {
     setIsLoading(true);
-    const symptomsKey = selectedSymptoms.sort().join(',');
-    const results = symptomResults[symptomsKey] || ["No specific issues found for this combination."];
-    setPossibleIssues(results);
+    const symptomsKey = selectedSymptoms.slice().sort().join(',');
+    const results = symptomResults[symptomsKey];
+
+    if (results) {
+      setPossibleIssues(results);
+    } else {
+      setPossibleIssues(["No match found. Try selecting fewer or different symptoms."]);
+    }
+
     setIsLoading(false);
   };
 
@@ -72,7 +80,11 @@ export default function SymptomCheckerPage() {
         ))}
       </div>
 
-      <Button onClick={handleCheckSymptoms} disabled={isLoading} className="mb-4 bg-accent text-accent-foreground">
+      <Button
+        onClick={handleCheckSymptoms}
+        disabled={isLoading || selectedSymptoms.length === 0}
+        className="mb-4 bg-accent text-accent-foreground"
+      >
         {isLoading ? "Checking..." : "Check Symptoms"}
       </Button>
 
