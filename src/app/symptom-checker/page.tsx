@@ -52,7 +52,8 @@ export default function SymptomCheckerPage() {
         {symptomsList.map(symptom => (
           <Button
             key={symptom}
-            variant={selectedSymptoms.includes(symptom) ? "primary" : "secondary"}
+            variant={selectedSymptoms.includes(symptom) ? "default" : "secondary"}
+            className={selectedSymptoms.includes(symptom) ? "bg-accent text-accent-foreground" : ""}
             onClick={() => toggleSymptom(symptom)}
           >
             {symptom}
