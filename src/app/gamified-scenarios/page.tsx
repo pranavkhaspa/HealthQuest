@@ -105,13 +105,118 @@ const healthChallenges = [
       { text: 'Looking down at her laptop all day', isHealthy: false },
     ],
   },
+  // Additional scenarios for a wider variety of real-life situations
+  {
+    id: 11,
+    character: 'Rajesh',
+    scenario: 'Rajesh feels hungry between meals. What’s a healthy snack option?',
+    options: [
+      { text: 'A sugary donut', isHealthy: false },
+      { text: 'A piece of fruit', isHealthy: true },
+      { text: 'A handful of pretzels', isHealthy: false },
+    ],
+  },
+  {
+    id: 12,
+    character: 'Aisha',
+    scenario: 'Aisha wants to reduce her salt intake. What should she avoid?',
+    options: [
+      { text: 'Fresh vegetables', isHealthy: false },
+      { text: 'Processed foods', isHealthy: true },
+      { text: 'Home-cooked meals', isHealthy: false },
+    ],
+  },
+  {
+    id: 13,
+    character: 'Omar',
+    scenario: 'Omar wants to improve his memory. Which activity is most helpful?',
+    options: [
+      { text: 'Watching TV passively', isHealthy: false },
+      { text: 'Solving puzzles and reading', isHealthy: true },
+      { text: 'Avoiding all mental stimulation', isHealthy: false },
+    ],
+  },
+  {
+    id: 14,
+    character: 'Fatima',
+    scenario: 'Fatima wants to maintain a healthy weight. What’s a key strategy?',
+    options: [
+      { text: 'Skipping meals', isHealthy: false },
+      { text: 'Balancing diet and exercise', isHealthy: true },
+      { text: 'Eating whatever she wants without limit', isHealthy: false },
+    ],
+  },
+  {
+    id: 15,
+    character: 'Li Wei',
+    scenario: 'Li Wei wants to lower his risk of heart disease. What’s an important lifestyle change?',
+    options: [
+      { text: 'Smoking cigarettes', isHealthy: false },
+      { text: 'Regular physical activity', isHealthy: true },
+      { text: 'Ignoring stress', isHealthy: false },
+    ],
+  },
+  {
+    id: 16,
+    character: 'Sofia',
+    scenario: 'Sofia is planning a healthy breakfast. Which option is the best?',
+    options: [
+      { text: 'A large stack of pancakes with syrup', isHealthy: false },
+      { text: 'Oatmeal with berries and nuts', isHealthy: true },
+      { text: 'A breakfast sandwich with bacon and cheese', isHealthy: false },
+    ],
+  },
+  {
+    id: 17,
+    character: 'Ethan',
+    scenario: 'Ethan wants to take care of his eyes. What should he do regularly?',
+    options: [
+      { text: 'Stare at screens for long periods without breaks', isHealthy: false },
+      { text: 'Get regular eye exams', isHealthy: true },
+      { text: 'Never wear sunglasses', isHealthy: false },
+    ],
+  },
+  {
+    id: 18,
+    character: 'Isabella',
+    scenario: 'Isabella wants to improve her sleep quality. What should she do?',
+    options: [
+      { text: 'Drink coffee right before bed', isHealthy: false },
+      { text: 'Establish a consistent sleep schedule', isHealthy: true },
+      { text: 'Use electronic devices in bed', isHealthy: false },
+    ],
+  },
+  {
+    id: 19,
+    character: 'Noah',
+    scenario: 'Noah wants to keep his teeth healthy. What’s essential?',
+    options: [
+      { text: 'Brush teeth after every meal', isHealthy: true },
+      { text: 'Never floss', isHealthy: false },
+      { text: 'Drink sugary soda regularly', isHealthy: false },
+    ],
+  },
+  {
+    id: 20,
+    character: 'Ava',
+    scenario: 'Ava wants to boost her immune system. What should she focus on?',
+    options: [
+      { text: 'Eating a variety of fruits and vegetables', isHealthy: true },
+      { text: 'Avoiding all physical activity', isHealthy: false },
+      { text: 'Getting as little sleep as possible', isHealthy: false },
+    ],
+  },
 ];
 
 export default function GamifiedScenariosPage() {
-  const [currentChallenge, setCurrentChallenge] = useState(healthChallenges[0]);
+  const [currentChallengeIndex, setCurrentChallengeIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [feedback, setFeedback] = useState('');
   const [challengeCompleted, setChallengeCompleted] = useState(false);
+
+  const currentChallenge = healthChallenges[currentChallengeIndex];
+  const isLastChallenge = currentChallengeIndex === healthChallenges.length - 1;
+  const allChallengesCompleted = currentChallengeIndex >= healthChallenges.length;
 
   const handleAnswer = (isHealthy: boolean) => {
     if (isHealthy) {
@@ -125,16 +230,21 @@ export default function GamifiedScenariosPage() {
 
     // Optionally, move to the next challenge after a delay
     setTimeout(() => {
-      const nextChallengeIndex = healthChallenges.findIndex(challenge => challenge.id === currentChallenge.id) + 1;
-      if (nextChallengeIndex < healthChallenges.length) {
-        setCurrentChallenge(healthChallenges[nextChallengeIndex]);
+      if (!isLastChallenge) {
+        setCurrentChallengeIndex(currentChallengeIndex + 1);
         setFeedback('');
         setChallengeCompleted(false);
       } else {
-        setFeedback('You have completed all the challenges!');
         setChallengeCompleted(false);
       }
     }, 2000);
+  };
+
+  const resetGame = () => {
+    setCurrentChallengeIndex(0);
+    setScore(0);
+    setFeedback('');
+    setChallengeCompleted(false);
   };
 
   return (
@@ -144,28 +254,42 @@ export default function GamifiedScenariosPage() {
         Help our characters make healthy decisions and earn points!
       </p>
 
-      <div className="bg-secondary/50 rounded-lg p-4 mb-4 max-w-md w-full">
-        <h2 className="text-xl font-semibold mb-2">
-          Scenario: {currentChallenge.character}
-        </h2>
-        <p className="mb-4">{currentChallenge.scenario}</p>
+      {!allChallengesCompleted ? (
+        <div className="bg-secondary/50 rounded-lg p-4 mb-4 max-w-md w-full">
+          <h2 className="text-xl font-semibold mb-2">
+            Scenario: {currentChallenge.character}
+          </h2>
+          <p className="mb-4">{currentChallenge.scenario}</p>
 
-        <div className="flex flex-col gap-2">
-          {currentChallenge.options.map((option, index) => (
-            <Button
-              key={index}
-              onClick={() => handleAnswer(option.isHealthy)}
-              className="bg-primary text-primary-foreground hover:bg-primary/80"
-              disabled={challengeCompleted}
-            >
-              {option.text}
-            </Button>
-          ))}
+          <div className="flex flex-col gap-2">
+            {currentChallenge.options.map((option, index) => (
+              <Button
+                key={index}
+                onClick={() => handleAnswer(option.isHealthy)}
+                className="bg-primary text-primary-foreground hover:bg-primary/80"
+                disabled={challengeCompleted}
+              >
+                {option.text}
+              </Button>
+            ))}
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="bg-secondary/50 rounded-lg p-4 mb-4 max-w-md w-full">
+          <h2 className="text-2xl font-semibold mb-4">
+            🎉 Congratulations! You've completed all the challenges! 🎉
+          </h2>
+          <p className="text-xl mt-4">
+            Your Final Score: {score} / {healthChallenges.length}
+          </p>
+          <Button onClick={resetGame} className="mt-4 bg-accent text-accent-foreground">
+            Play Again
+          </Button>
+        </div>
+      )}
 
       {feedback && <p className="text-xl mt-4">{feedback}</p>}
-      <p className="text-xl mt-4">Your Score: {score}</p>
+      {!allChallengesCompleted && <p className="text-xl mt-4">Your Score: {score}</p>}
     </div>
   );
 }
