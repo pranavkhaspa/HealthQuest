@@ -2,9 +2,15 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle
+} from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { useToast } from "@/hooks/use-toast"
+import { useToast } from '@/hooks/use-toast';
 
 interface Clinic {
   name: string;
@@ -53,7 +59,7 @@ export default function ClinicFinderPage() {
   const [healthIssue, setHealthIssue] = useState('');
   const [clinics, setClinics] = useState<Clinic[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const { toast } = useToast()
+  const { toast } = useToast();
 
   const handleFindClinics = () => {
     setIsLoading(true);
@@ -71,7 +77,7 @@ export default function ClinicFinderPage() {
         toast({
           title: "No Clinics Found",
           description: "No clinics matching the search criteria were found.",
-          variant: "destructive",
+          variant: "destructive"
         });
         setClinics([]);
       }
@@ -80,8 +86,8 @@ export default function ClinicFinderPage() {
       toast({
         title: "Error",
         description: "Failed to find clinics. Please try again.",
-        variant: "destructive",
-      })
+        variant: "destructive"
+      });
       setClinics([]);
     } finally {
       setIsLoading(false);
@@ -91,9 +97,9 @@ export default function ClinicFinderPage() {
   return (
     <div className="flex flex-col items-center justify-start min-h-screen py-8">
       <h1 className="text-3xl font-bold mb-4">Local Clinic Finder</h1>
-      <p className="text-lg mb-4">Enter your health issue to find the nearest clinics:</p>
+      <p className="text-lg mb-4 text-center">Enter your health issue to find the nearest clinics:</p>
 
-      <div className="flex flex-col md:flex-row items-center gap-2 mb-4">
+      <div className="flex flex-col md:flex-row items-center gap-2 mb-6">
         <Input
           type="text"
           placeholder="Enter Health Issue"
@@ -109,18 +115,18 @@ export default function ClinicFinderPage() {
       {clinics.length > 0 && (
         <Card className="w-full max-w-md">
           <CardHeader>
-            <CardTitle>Nearest Clinics:</CardTitle>
-            <CardDescription>Clinics based on your health issue:</CardDescription>
+            <CardTitle>Matching Clinics</CardTitle>
+            <CardDescription>Based on your input: <strong>{healthIssue}</strong></CardDescription>
           </CardHeader>
           <CardContent>
-            <ul>
+            <ul className="list-disc pl-4 space-y-3">
               {clinics.map((clinic, index) => (
-                <li key={index} className="mb-2">
-                  {clinic.name}
-                  <br />
-                  {clinic.address}
-                  <br />
-                  Lat: {clinic.location.lat}, Lng: {clinic.location.lng}
+                <li key={index}>
+                  <strong>{clinic.name}</strong>
+                  <div>{clinic.address}</div>
+                  <small className="text-muted-foreground">
+                    Lat: {clinic.location.lat}, Lng: {clinic.location.lng}
+                  </small>
                 </li>
               ))}
             </ul>
