@@ -57,11 +57,18 @@ const basicHealthAdviceFlow = ai.defineFlow<
   },
   async input => {
     try{
+      if (!process.env.GOOGLE_GENAI_API_KEY) {
+        return {
+          advice: "The AI assistant is unavailable. Please ensure the GOOGLE_GENAI_API_KEY environment variable is set."
+        };
+      }
       const {output} = await prompt(input);
       return output!;
     } catch (error: any) {
       console.error("[GoogleGenerativeAI Error]:", error);
-      throw new Error(`[GoogleGenerativeAI Error]: ${error.message}. Error source: src/ai/flows/basic-health-advice.ts (59:22)`);
+      return {
+        advice: "Failed to get health advice. Please try again later."
+      };
     }
   }
 );
