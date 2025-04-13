@@ -1,0 +1,9 @@
+google-generativeai==0.4.1
+streamlit
+google-generativeai
+geocoder
+requests
+folium
+streamlit-folium
+SpeechRecognition
+pyaudio
