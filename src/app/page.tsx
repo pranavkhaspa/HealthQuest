@@ -17,7 +17,7 @@ export default function Home() {
         <Link href="/clinic-finder" className="px-6 py-3 bg-accent text-accent-foreground rounded-md hover:bg-accent/80 transition-colors">
           Local Clinic Finder
         </Link>
-        <Link href="/health-advice" className="px-6 py-3 bg-primary text-primary-foreground rounded-md hover:bg-primary/80 transition-colors">
+        <Link href="https://www.example.com" className="px-6 py-3 bg-primary text-primary-foreground rounded-md hover:bg-primary/80 transition-colors">
           Basic Health Advice
         </Link>
       </div>
