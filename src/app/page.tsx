@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 
 export default function Home() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="flex flex-col items-center justify-center min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-green-100 to-blue-100">
       <div className="max-w-3xl w-full space-y-8">
         {/* Header Section */}
         <div className="text-center">
@@ -33,6 +33,7 @@ export default function Home() {
             <Button className="w-full h-16 bg-yellow-500 hover:bg-yellow-700 text-white font-bold rounded-lg shadow-md">
               Local Clinic Finder
             </Button>
+            
           </Link>
           <Link href="https://healthlit-1.onrender.com/" className="transition-all duration-300 ease-in-out transform hover:scale-105">
             <Button className="w-full h-16 bg-red-500 hover:bg-red-700 text-white font-bold rounded-lg shadow-md">
